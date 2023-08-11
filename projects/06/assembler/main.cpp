@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "code.h"
+#include "symbol_table.h"
 #include <iostream>
 #include <fstream>
 #include <bitset>
@@ -24,25 +25,41 @@ int main(int argc, char *argv[]) {
         std::cerr << "Could not open file" << std::endl;
         return 1;
     }
-    
+
+    parser.mapLabels();
     //initializes current command allowing function call at end of loop
     //so the predicate applies to the current command 
     parser.advance();
 
     while (parser.hasMoreCommands()) {
+        std::string symbol = parser.symbol();
+
         if (parser.commandType() == A_COMMAND) {
-            hackFile << "0";
-            int symbolValue = std::stoi(parser.symbol());
-            std::bitset<15> binarySymbol(symbolValue);
-            hackFile << binarySymbol << "\n";
+            if (isStringInteger(symbol))
+            {
+                int symbolValue = std::stoi(symbol);
+                std::bitset<15> binarySymbol(symbolValue);
+                hackFile << "0" << binarySymbol << "\n";
+            }
+            else if (parser.symbolTable.contains(symbol))
+            {
+                std::bitset<15> binarySymbol(parser.symbolTable.getAddress(symbol));
+                hackFile << "0" << binarySymbol << "\n";
+            }
+            else
+            {
+                int ramAddress = parser.getRamAddress();
+                parser.symbolTable.addEntry(symbol, ramAddress);
+                std::bitset<15> binaryRamAddress(ramAddress);
+                hackFile << "0" << binaryRamAddress << "\n";
+            }
         }
 
         else if (parser.commandType() == C_COMMAND) {
-            hackFile << "111";
-            hackFile << comp(parser.comp());
-            hackFile << dest(parser.dest());
-            hackFile << jump(parser.jump()) << "\n";
+            hackFile << "111" << comp(parser.comp()) << dest(parser.dest()) 
+                    << jump(parser.jump()) << "\n";
         }
+
         parser.advance();
     }
 

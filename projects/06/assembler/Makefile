@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++11 -Wall -g
 
 EXECUTABLE = assembler
 
-SOURCES = parser.cpp main.cpp code.cpp
+SOURCES = parser.cpp main.cpp code.cpp symbol_table.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
