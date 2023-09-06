@@ -1,0 +1,44 @@
+class Main
+{
+    function void main()
+    {
+        var int count;
+        var int fiveMultiple;
+        var int threeMultiple;
+
+        let count = 1;
+
+        while (count < 24)
+        {
+            let threeMultiple = count / 3 * 3;
+            let fiveMultiple = count / 5 * 5;
+            
+            if (threeMultiple = count & fiveMultiple = count)
+            {
+                do Output.printString("FizzBuzz");
+            }
+
+            else 
+            {
+                if (~(fiveMultiple = count) & (threeMultiple = count)) 
+                {
+                    do Output.printString("Fizz");
+                }
+                
+                if (~(threeMultiple = count) & (fiveMultiple = count)) 
+                {
+                    do Output.printString("Buzz");
+                }
+
+                if (~(threeMultiple = count) & ~(fiveMultiple = count)) {
+                    do Output.printInt(count);
+                }
+            }
+
+            do Output.println();
+            let count = count + 1;
+        }
+
+        return;
+    }
+}
